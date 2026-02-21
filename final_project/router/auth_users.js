@@ -64,6 +64,18 @@ regd_users.put("/auth/review/:isbn", (req, res) => {
         return res.status(300).json({ message: "error occured" });
 });
 
+// delete a book review
+regd_users.delete("/auth/review/:isbn", (req, res) => {
+    const req_book = books[req.params.isbn];
+    const username = req.session.authorization["username"];
+    if (req_book && username) {
+        delete req_book["reviews"][username];
+        return res.status(200).send(JSON.stringify(req_book));
+    }
+    else
+        return res.status(300).json({ message: "error occured" });
+});
+
 module.exports.authenticated = regd_users;
 module.exports.isValid = isValid;
 module.exports.users = users;
